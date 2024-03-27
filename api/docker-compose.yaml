@@ -9,14 +9,38 @@ services:
       - MYSQL_DATABASE=tlc
       - MYSQL_USER=tlc
       - MYSQL_PASSWORD=tlc
+    networks:
+      - app_network
+
   etherpad:
-    image: etherpad/etherpad:stable
+    image: etherpad/etherpad
     ports:
       - "9001:9001"
     volumes:
       - ./APIKEY.txt:/opt/etherpad-lite/APIKEY.txt
+    networks:
+      - app_network
   mail:
     image: bytemark/smtp
     restart: always
     ports:
       - "2525:25"
+    networks:
+      - app_network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - etherpad
+      - mail
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge

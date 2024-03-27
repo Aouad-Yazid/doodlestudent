@@ -1,0 +1,22 @@
+FROM maven:3.8.4-openjdk-17 AS builder
+
+WORKDIR /app
+
+COPY pom.xml .
+
+# Copier les fichiers du projet 
+COPY src src
+
+# Construire l'application avec Maven (inclut l'étape de packaging)
+RUN mvn clean package -Dquarkus.package.type=uber-jar
+
+FROM registry.access.redhat.com/ubi8/openjdk-17:1.16
+
+# Copier le fichier JAR construit à partir de l'image de construction
+COPY --from=builder /app/target/tlcdemoApp-1.0.0-SNAPSHOT-runner.jar .
+
+# Exposer le port 9090 sur lequel l'application Quarkus écoute
+EXPOSE 9090
+
+# Commande pour exécuter l'application lorsqu'un conteneur est démarré
+CMD ["java", "-jar", "tlcdemoApp-1.0.0-SNAPSHOT-runner.jar"]
