@@ -1,0 +1,27 @@
+# Utiliser l'image officielle de Node.js
+FROM node:16 AS builder
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+# Copier les fichiers du projet
+COPY . .
+
+# Installer les dépendances
+RUN npm install
+
+# Construire l'application Angular en mode production
+RUN npm run build
+
+# Utiliser l'image NGINX pour servir l'application construite
+FROM nginx:alpine
+
+# Copier les fichiers construits de l'étape précédente vers le répertoire NGINX
+COPY --from=builder /app/dist/tlcfront /usr/share/nginx/html
+
+# Exposer le port 4200
+EXPOSE 80
+
+# Commande pour démarrer NGINX
+CMD ["nginx", "-g", "daemon off;"]
+
