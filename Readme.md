@@ -5,15 +5,15 @@
 
 ### Dockerfile pour la partie backend (dans `doodlestudent/api`)
 
-Le Dockerfile situé dans le répertoire `doodlestudent/api` est utilisé pour construire une image Docker du service backend de l'application. Il commence par utiliser l'image Maven comme base pour la con>
+Le Dockerfile situé dans le répertoire doodlestudent/api est utilisé pour construire une image Docker du service backend de l'application. Il commence par utiliser l'image Maven comme base pour la construction, puis copie les fichiers sources du projet dans le répertoire de travail. Ensuite, il exécute la commande Maven pour construire l'application Quarkus, et expose le port 9090 sur lequel l'application sera accessible.
 
 ### Dockerfile pour la partie frontend (dans `doodlestudent/front`)
 
-Le Dockerfile situé dans le répertoire `doodlestudent/front` est utilisé pour construire une image Docker du service frontend de l'application. Il commence par utiliser l'image officielle Node.js comme >
+Le Dockerfile situé dans le répertoire doodlestudent/front est utilisé pour construire une image Docker du service frontend de l'application. Il commence par utiliser l'image officielle Node.js comme base pour la construction. Ensuite, il copie tous les fichiers du projet dans le répertoire de travail, installe les dépendances nécessaires avec npm install, construit l'application Angular en mode production avec npm run build, puis utilise l'image NGINX pour servir l'application construite. Enfin, il expose le port 80 sur lequel l'application sera accessible.
 
 ### docker-compose.yml
 
-Le docker-compose.yml est utilisé pour orchestrer le déploiement de l'application et de ses dépendances. Il définit plusieurs services, y compris une base de données MySQL, Etherpad, un serveur SMTP, ai>
+Le docker-compose.yml est utilisé pour orchestrer le déploiement de l'application et de ses dépendances. Il définit plusieurs services, y compris une base de données MySQL, Etherpad, un serveur SMTP, ainsi que les services backend et frontend. Chaque service est configuré avec les options nécessaires, telles que les variables d'environnement pour la configuration de la base de données et du serveur SMTP, ainsi que les dépendances entre les différents services. Ce fichier permet de facilement déployer et configurer l'ensemble de l'application en utilisant Docker et Docker Compose.
 
 ## Configuration de la Gateway d'API avec NGINX - Tâche 2 
 
