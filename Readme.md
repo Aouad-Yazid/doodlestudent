@@ -23,7 +23,7 @@ Dans cette partie, j'ai configuré la gateway d'API en utilisant NGINX pour rout
 
 ## Tâche 4 - Documentation du Déploiement
  
-!["Deployment image"]([déploiment.png](https://github.com/Aouad-Yazid/doodlestudent/blob/main/deploiement.png))
+!["Deployment image"](deploiement.png)
 
 cette image montre deux conteneurs Docker, un pour le service frontend (`front_frontend_1`) et un pour le service backend (`api_etherpad_1`, `api_db_1`, `api_mail_1`, `api_api_1`). Les conteneurs du service backend sont liés à différents services, y compris Etherpad, la base de données, et le serveur SMTP. Les services frontend et backend sont démarrés et fonctionnels sur la machine virtuelle.
 
