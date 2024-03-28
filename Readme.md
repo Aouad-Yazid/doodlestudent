@@ -1,15 +1,53 @@
-# Remote meetings planning
+### Documentation projet - Aouad Yazid
 
-This project is used in a course on the *ops* part at the [University of Rennes](https://www.univ-rennes1.fr/), France. It is a kind of doodle clone developed in so-called "native cloud" technologies in order to allow students to work on a continuous deployment chain in a containerized environment. Among the feature, the application automatically initializes a pad for the meeting and a chat room for the meeting participants.
 
-- The [back](https://github.com/barais/doodlestudent/tree/main/api) is developed using the [quarkus.io](https://quarkus.io/) framework. 
-- The [front](https://github.com/barais/doodlestudent/tree/main/front) is developed in [angular](https://angular.io/) using the [primeng](https://www.primefaces.org/primeng/)  angular UI component library and the [fullcalendar](https://fullcalendar.io/) graphical component.
+## Dockerfile et docker-compose.yml pour la Tâche 1
 
-A demo of the application is available [here](https://doodle.diverse-team.fr/).
+### Dockerfile pour la partie backend (dans `doodlestudent/api`)
 
-Three videos (in french) are available. They present:
-- the [main application feature](https://drive.google.com/file/d/1GQbdgq2CHcddTlcoHqM5Zc8Dw5o_eeLg/preview), 
-- its [architecture](https://drive.google.com/file/d/1l5UAsU5_q-oshwEW6edZ4UvQjN3-tzwi/preview) 
-- and a [short code review](https://drive.google.com/file/d/1jxYNfJdtd4r_pDbOthra360ei8Z17tX_/preview) .
+Le Dockerfile situé dans le répertoire `doodlestudent/api` est utilisé pour construire une image Docker du service backend de l'application. Il commence par utiliser l'image Maven comme base pour la con>
 
-For french native speaker that wants to follow the course. The course web page is available [here](https://hackmd.diverse-team.fr/s/SJqu5DjSD).
+### Dockerfile pour la partie frontend (dans `doodlestudent/front`)
+
+Le Dockerfile situé dans le répertoire `doodlestudent/front` est utilisé pour construire une image Docker du service frontend de l'application. Il commence par utiliser l'image officielle Node.js comme >
+
+### docker-compose.yml
+
+Le docker-compose.yml est utilisé pour orchestrer le déploiement de l'application et de ses dépendances. Il définit plusieurs services, y compris une base de données MySQL, Etherpad, un serveur SMTP, ai>
+
+## Configuration de la Gateway d'API avec NGINX - Tâche 2 
+
+Dans cette partie, j'ai configuré la gateway d'API en utilisant NGINX pour router les requêtes vers les différents services backend en fonction de l'URI. Pour ce faire, j'ai créé trois fichiers de configuration nginx (nginx1.conf, nginx2.conf, nginx3.conf) dans le répertoire /api/nginxConf. Chaque fichier de configuration définit un server block pour un service spécifique, en écoutant sur le port 80 et en utilisant le nom de domaine correspondant (myadmin.tlc.fr, doodle.tlc.fr, pad.tlc.fr). Les configurations nginx utilisent des directives location pour définir les chemins d'accès et les règles de routage vers les services backend appropriés. De plus, j'ai ajouté les entrées correspondantes dans le fichier /etc/hosts pour mapper les noms de domaine aux adresses IP du serveur. Cela permet de rediriger les requêtes des utilisateurs vers les bons services backend en fonction de l'URI demandée.
+
+## Tâche 3
+
+## Tâche 4 - Documentation du Déploiement
+ 
+
+cette image montre deux conteneurs Docker, un pour le service frontend (`front_frontend_1`) et un pour le service backend (`api_etherpad_1`, `api_db_1`, `api_mail_1`, `api_api_1`). Les conteneurs du service backend sont liés à différents services, y compris Etherpad, la base de données, et le serveur SMTP. Les services frontend et backend sont démarrés et fonctionnels sur la machine virtuelle.
+
+
+## Aventure - Déploiement avec microK8S
+
+Le déploiement de la partie back de l'application repose sur l'utilisation de microK8S pour orchestrer les conteneurs Docker. Voici comment fonctionne le déploiement :
+
+### Fichier deployement-back.yaml
+
+Ce fichier définit un déploiement pour les services backend de l'application. Il spécifie les réplicas, les images des conteneurs, et les ports exposés pour chaque service. Plus précisément :
+- Le service API est déployé avec l'image `localhost:32000/api:latest` et expose le port 80.
+- Le service Etherpad est déployé avec l'image `localhost:32000/etherpad:latest` et expose le port 9001.
+- Le service MySQL est déployé avec l'image `localhost:32000/mysql:latest` et expose le port 3306.
+Chaque conteneur est configuré avec des arguments spécifiques, notamment pour les paramètres de connexion à la base de données MySQL et les paramètres de configuration de l'API.
+
+### Fichier namespace.yaml
+
+Ce fichier crée un espace de noms isolé appelé `doodle-back` pour héberger les services backend. Cela permet d'isoler ces services du reste de l'infrastructure et de garantir une meilleure gestion et organisation des ressources.
+
+### Fichier service-back.yaml
+
+Ce fichier définit un service pour les services backend dans l'espace de noms `doodle-back`. Il permet la communication entre les différents conteneurs en exposant les ports nécessaires. Plus précisément :
+- Le service API expose le port 80.
+- Le service Etherpad expose le port 9001.
+- Le service MySQL expose le port 3306.
+- Un service SMTP est également exposé sur le port 25 pour la communication SMTP.
+ 
